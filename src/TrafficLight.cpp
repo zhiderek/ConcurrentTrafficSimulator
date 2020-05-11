@@ -14,7 +14,7 @@ T MessageQueue<T>::receive()
     // to wait for and receive new messages and pull them from the queue using move semantics. 
     // The received object should then be returned by the receive function. 
     std::unique_lock<std::mutex> uLock(_mtx);
-    _cond.wait(uLock, [this] {return !_queue.empty();});
+    _cond.wait(uLock, [this] {return !_queue.empty(); });
     T msg = std::move(_queue.back());
     _queue.pop_back();
     return msg;
@@ -61,6 +61,7 @@ TrafficLightPhase TrafficLight::getCurrentPhase()
 void TrafficLight::simulate()
 {
     // FP.2b : Finally, the private method „cycleThroughPhases“ should be started in a thread when the public method „simulate“ is called. To do this, use the thread queue in the base class. 
+    threads.emplace_back(std::thread(&TrafficLight::cycleThroughPhases, this));  
 }
 
 // virtual function which is executed in a thread
@@ -74,7 +75,7 @@ void TrafficLight::cycleThroughPhases()
     while (true) {
         auto end = std::chrono::steady_clock::now();
         auto time_elapsed = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
-        std::cout << "time elapsed = " << time_elapsed << std::endl;
+        std::cout << "time elapsed = " << time_elapsed << " seconds" << std::endl;
         // toggle state
         TrafficLightPhase newPhase;
         if (_currentPhase == TrafficLightPhase::green) {

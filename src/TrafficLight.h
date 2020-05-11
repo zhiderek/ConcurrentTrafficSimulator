@@ -49,7 +49,7 @@ public:
     
 private:
     TrafficLightPhase _currentPhase;
-    MessageQueue<TrafficLightPhase> queue;
+    std::shared_ptr<MessageQueue<TrafficLightPhase>> queue;
     // typical behaviour methods
     void cycleThroughPhases();
     

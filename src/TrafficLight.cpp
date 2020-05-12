@@ -90,8 +90,8 @@ void TrafficLight::cycleThroughPhases()
             else {
                 _currentPhase = TrafficLightPhase::green;
             }
-            auto ftr = std::async(std::launch::async, &MessageQueue<TrafficLightPhase>::send, queue, std::move(_currentPhase));
-            ftr.wait();
+            //auto ftr = std::async(std::launch::async, &MessageQueue<TrafficLightPhase>::send, queue, std::move(_currentPhase));
+            queue->send(std::move(_currentPhase));
             prev  = std::chrono::system_clock::now();
             duration = distr(eng);
         }             
